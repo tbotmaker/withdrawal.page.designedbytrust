@@ -1,0 +1,365 @@
+<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#000000">
+<title>Transfer Receipt</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+
+<style>
+body { margin:0; font-family:Arial; }
+
+/* ===== LOADING ===== */
+#loadingPage {
+    background:#000;
+    color:#fff;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}
+
+.loading-container {
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+}
+
+.loader-wrapper {
+    position:relative;
+    width:90px;
+    height:90px;
+}
+
+.loader {
+    width:100%;
+    height:100%;
+    border:3px solid rgba(255,255,255,0.1);
+    border-top:3px solid #fff;
+    border-radius:50%;
+    animation:spin 1.2s linear infinite;
+    box-sizing: border-box; /* Added for perfect centering */
+}
+
+.loader-icon {
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    font-size:32px;
+}
+
+.loading-text {
+    margin-top:18px;
+    font-size:12px;
+    letter-spacing:2px;
+    color:#ccc;
+    text-align:center;
+}
+
+/* ===== MAIN ===== */
+#mainPage {
+    display:none;
+    background: radial-gradient(circle at top, #1A182D, #050505);
+    color:#fff;
+    min-height:100vh;
+}
+
+.container {
+    max-width:420px;
+    margin:auto;
+    padding:20px;
+    opacity:0;
+    transform:translateY(-60px);
+    animation:fadeSlideDown 0.9s ease forwards;
+}
+
+.center { text-align:center; margin-top:30px; }
+
+.tick-circle {
+    width:90px;height:90px;
+    margin:auto;
+    border-radius:50%;
+    background:rgba(0,255,150,0.12);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border:2px solid #1D373E;
+    box-shadow:0 0 20px rgba(0,220,140,0.4);
+}
+
+.tick-circle span { font-size:65px; color:#00ff99; }
+
+.title {
+    margin-top:25px;
+    font-size:22px;
+    color:#00ff99;
+    font-weight:bold;
+    letter-spacing:1px;
+}
+
+.subtitle {
+    font-size:12px;
+    color:#6b7280;
+    margin-top:8px;
+    letter-spacing:1px;
+    font-weight:bold;
+}
+
+.card {
+    margin-top:25px;
+    background:#111113;
+    border-radius:15px;
+    border:2px solid #171522;
+    padding:20px;
+    opacity:0;
+    transform:translateY(-30px);
+    animation:fadeSlideDown 1s ease forwards;
+    animation-delay:0.2s;
+}
+
+.amount { text-align:center; margin-bottom:25px; }
+.amount h1 { font-size:36px; margin:10px 0; }
+
+.separator {
+    height:1px;
+    margin:25px 0;
+    background:repeating-linear-gradient(
+        to right,
+        rgba(36,36,38,1),
+        rgba(36,36,38,1) 7px,
+        transparent 7px,
+        transparent 12px
+    );
+}
+
+.row,.row2 {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:12px;
+    border-radius:10px;
+    margin-top:10px;
+}
+
+.row { background:#1E1E20; }
+.row2 { background:#161618; }
+
+.row-left {
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.icon-box {
+    width:38px;height:38px;
+    border-radius:10px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.icon-dark { background:#000; }
+.icon-light { background:#1E1E20; }
+
+.icon-box span { font-size:20px; color:#ccc; }
+
+.dot {
+    width:10px;height:10px;
+    border-radius:50%;
+    background:#00ff99;
+    box-shadow:0 0 6px rgba(0,255,153,0.6);
+    animation:blink 1.8s infinite ease-in-out;
+}
+
+@keyframes blink {
+    0%{opacity:1;}
+    50%{opacity:0.3;}
+    100%{opacity:1;}
+}
+
+/* BUTTON */
+.button-wrap {
+    position:fixed;
+    bottom:50px;
+    width:100%;
+    display:flex;
+    justify-content:center;
+    opacity:0;
+    transform:translateY(50px);
+    animation:fadeUp 0.8s ease forwards;
+    animation-delay:0.4s;
+}
+
+.button {
+    width:90%;
+    max-width:420px;
+    background:#fff;
+    color:#000;
+    text-align:center;
+    padding:15px;
+    border-radius:12px;
+    font-weight:bold;
+    cursor:pointer; /* Added pointer for clickability */
+    user-select: none;
+}
+
+.button:active {
+    background: #e0e0e0; /* Added subtle click feedback */
+}
+
+/* FOOTER */
+.footer {
+    position:fixed;
+    bottom:10px;
+    width:100%;
+    text-align:center;
+    font-size:12px;
+    opacity:0;
+    letter-spacing:1px;
+    transform:translateY(30px);
+    animation:fadeUp 0.8s ease forwards;
+    animation-delay:0.6s;
+}
+
+/* ANIMATIONS */
+@keyframes spin { to { transform:rotate(360deg); } }
+
+@keyframes fadeSlideDown {
+    from { opacity:0; transform:translateY(-60px); }
+    to { opacity:1; transform:translateY(0); }
+}
+
+@keyframes fadeUp {
+    from { opacity:0; transform:translateY(60px); }
+    to { opacity:0.4; transform:translateY(0); }
+}
+</style>
+</head>
+
+<body>
+
+<div id="loadingPage">
+    <div class="loading-container">
+        <div class="loader-wrapper">
+            <div class="loader"></div>
+            <span class="material-symbols-outlined loader-icon">credit_card</span>
+        </div>
+        <div class="loading-text">FETCHING DETAILS</div>
+    </div>
+</div>
+
+<div id="mainPage">
+
+<div class="container">
+
+    <div class="center">
+        <div class="tick-circle">
+            <span class="material-symbols-outlined">check_small</span>
+        </div>
+        <div class="title">TRANSFER COMPLETE</div>
+        <div class="subtitle">FUNDS CREDITED</div>
+    </div>
+
+    <div class="card">
+
+        <div class="amount">
+            <small>WITHDRAWAL AMOUNT</small>
+            <h1 id="amount">₹ 0.00</h1>
+        </div>
+
+        <div class="separator"></div>
+
+        <div class="row">
+            <div class="row-left">
+                <div class="icon-box icon-dark">
+                    <span class="material-symbols-outlined">account_balance_wallet</span>
+                </div>
+                <div>
+                    <small>TO VPA</small><br>
+                    <span id="number">---</span>
+                </div>
+            </div>
+            <div class="dot"></div>
+        </div>
+
+        <div class="row2">
+            <div class="row-left">
+                <div class="icon-box icon-light">
+                    <span class="material-symbols-outlined">tag</span>
+                </div>
+                REF NO
+            </div>
+            <div id="txn">---</div>
+        </div>
+
+        <div class="row2">
+            <div class="row-left">
+                <div class="icon-box icon-light">
+                    <span class="material-symbols-outlined">calendar_today</span>
+                </div>
+                DATE
+            </div>
+            <div id="date">---</div>
+        </div>
+
+    </div>
+
+</div>
+
+<div class="button-wrap">
+    <div class="button" onclick="window.close();">CLOSE & RETURN</div>
+</div>
+
+<div class="footer">
+    © 2026 TMaker | Designed By Trust
+</div>
+
+</div>
+
+<script>
+// GET PARAMS
+const params = new URLSearchParams(window.location.search);
+
+const transaction_id = params.get("transaction_id") || "N/A";
+const amount = params.get("amount") || "N/A";
+const number = params.get("number") || "N/A";
+const timestamp = params.get("timestamp") || "";
+
+// FORMAT DATE (Fixed to handle string epochs)
+function formatDate(ts){
+    if(!ts) return "N/A";
+    
+    // Convert text string to integer if it is an epoch timestamp
+    const parsedTs = /^\d+$/.test(ts) ? parseInt(ts, 10) : ts;
+    const d = new Date(parsedTs);
+    
+    // Check if the date is valid
+    if (isNaN(d.getTime())) return "Invalid Date";
+
+    return d.toLocaleString("en-IN", {
+        day:"2-digit",
+        month:"short",
+        hour:"2-digit",
+        minute:"2-digit"
+    });
+}
+
+// SET DATA
+document.getElementById("amount").innerText = "₹ " + amount;
+document.getElementById("number").innerText = number;
+document.getElementById("txn").innerText = transaction_id;
+document.getElementById("date").innerText = formatDate(timestamp);
+
+// SWITCH AFTER 2.5s
+setTimeout(()=>{
+    document.getElementById("loadingPage").style.display="none";
+    document.getElementById("mainPage").style.display="block";
+},2500);
+</script>
+
+</body>
+</html>
