@@ -1,4 +1,4 @@
-<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -41,7 +41,7 @@ body { margin:0; font-family:Arial; }
     border-top:3px solid #fff;
     border-radius:50%;
     animation:spin 1.2s linear infinite;
-    box-sizing: border-box; /* Added for perfect centering */
+    box-sizing: border-box;
 }
 
 .loader-icon {
@@ -203,12 +203,12 @@ body { margin:0; font-family:Arial; }
     padding:15px;
     border-radius:12px;
     font-weight:bold;
-    cursor:pointer; /* Added pointer for clickability */
-    user-select: none;
+    cursor:pointer;
+    user-select:none;
 }
 
 .button:active {
-    background: #e0e0e0; /* Added subtle click feedback */
+    background:#e0e0e0;
 }
 
 /* FOOTER */
@@ -241,6 +241,9 @@ body { margin:0; font-family:Arial; }
 </head>
 
 <body>
+
+<!-- AUDIO -->
+<audio id="successSound" src="finalsong.mp3" preload="auto"></audio>
 
 <div id="loadingPage">
     <div class="loading-container">
@@ -279,7 +282,7 @@ body { margin:0; font-family:Arial; }
                     <span class="material-symbols-outlined">account_balance_wallet</span>
                 </div>
                 <div>
-                    <small>TO VPA</small><br>
+                    <small>TO WALLET</small><br>
                     <span id="number">---</span>
                 </div>
             </div>
@@ -321,7 +324,6 @@ body { margin:0; font-family:Arial; }
 </div>
 
 <script>
-// GET PARAMS
 const params = new URLSearchParams(window.location.search);
 
 const transaction_id = params.get("transaction_id") || "N/A";
@@ -329,15 +331,10 @@ const amount = params.get("amount") || "N/A";
 const number = params.get("number") || "N/A";
 const timestamp = params.get("timestamp") || "";
 
-// FORMAT DATE (Fixed to handle string epochs)
 function formatDate(ts){
     if(!ts) return "N/A";
-    
-    // Convert text string to integer if it is an epoch timestamp
     const parsedTs = /^\d+$/.test(ts) ? parseInt(ts, 10) : ts;
     const d = new Date(parsedTs);
-    
-    // Check if the date is valid
     if (isNaN(d.getTime())) return "Invalid Date";
 
     return d.toLocaleString("en-IN", {
@@ -348,16 +345,20 @@ function formatDate(ts){
     });
 }
 
-// SET DATA
 document.getElementById("amount").innerText = "₹ " + amount;
 document.getElementById("number").innerText = number;
 document.getElementById("txn").innerText = transaction_id;
 document.getElementById("date").innerText = formatDate(timestamp);
 
-// SWITCH AFTER 2.5s
+// SWITCH + PLAY SOUND
 setTimeout(()=>{
     document.getElementById("loadingPage").style.display="none";
     document.getElementById("mainPage").style.display="block";
+
+    // PLAY SOUND ONCE
+    const sound = document.getElementById("successSound");
+    sound.play().catch(()=>{}); // avoids autoplay block error
+
 },2500);
 </script>
 
